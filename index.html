@@ -82,6 +82,25 @@
       </div>
     </main>
 
+    <!-- View Details Container -->
+    <div
+      id="viewDetails"
+      class="fixed inset-0 bg-black/70 hidden z-50 flex items-end md:items-center justify-center"
+    >
+      <div
+        class="bg-gray-900 w-full md:w-[28rem] max-h-[90vh] rounded-t-xl md:rounded-xl p-4 overflow-y-auto"
+      >
+        <button
+          id="closeDetailsBtn"
+          class="text-gray-400 hover:text-white text-sm mb-3"
+        >
+          Close ✕
+        </button>
+
+        <div id="detailsContent"></div>
+      </div>
+    </div>
+
     <!-- FOOTER -->
 
     <footer
@@ -143,5 +162,7 @@
         © 2025 Developed by <span class="font-semibold">Shameel Shajaad</span>
       </p>
     </footer>
+
+    <script src="assets/js/app.js"></script>
   </body>
 </html>
