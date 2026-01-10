@@ -219,3 +219,25 @@ async function addNewItemToApi(product) {
   alert("New item added successfully!");
   fetchInventoryData();
 }
+
+async function deleteItemFromApi(productId) {
+  const response = await fetch(`https://dummyjson.com/products/${productId}`, {
+    method: "DELETE",
+  });
+  const data = await response.json();
+  console.log("Deleted from API:", data);
+  alert("Item deleted successfully!");
+  fetchInventoryData();
+}
+
+async function editItemInApi(productId, updatedData) {
+  const response = await fetch(`https://dummyjson.com/products/${productId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedData),
+  });
+  const data = await response.json();
+  console.log("Updated in API:", data);
+  alert("Item updated successfully!");
+  fetchInventoryData();
+}
