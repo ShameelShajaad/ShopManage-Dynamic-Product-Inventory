@@ -37,7 +37,7 @@
           class="menu-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           <div
-            class="bg-white rounded-xl p-4 flex flex-col items-center gap-3 hover:scale-105 transition-transform duration-300"
+            class="bg-white rounded-xl p-4 flex flex-col items-center gap-3 hover:scale-105 transition-transform duration-300 shadow-xl"
           >
             <div
               class="relative w-full h-48 md:h-56 lg:h-80 rounded-lg overflow-hidden"
@@ -49,12 +49,13 @@
               />
             </div>
 
-            <p class="text-gray font-semibold text-lg text-center">
-              name
-            </p>
-            <p class="text-gray-600 text-sm text-center">
-              price
-            </p>
+            <p class="text-gray font-semibold text-lg text-center">name</p>
+            <p class="text-gray-600 text-sm text-center">price</p>
+            <button
+              class="view_details_btn border bg-gray-400 hover:bg-gray-500 transition-all rounded-full border-none px-10 md:px-18 py-2 flex gap-2"
+            >
+              <p class="text-lg text-white">View Details</p>
+            </button>
             <div class="flex gap-3">
               <button
                 class="edit_btn flex items-center border bg-[#137fec] hover:bg-blue-600 transition-all rounded-full border-none px-6 md:px-12 py-2 flex gap-2"
@@ -80,5 +81,67 @@
         </div>
       </div>
     </main>
+
+    <!-- FOOTER -->
+
+    <footer
+      class="flex flex-col items-center gap-4 py-6 bg-white border-t border-gray-700"
+    >
+      <!-- SOCIAL LINKS -->
+
+      <div class="flex gap-6 flex-wrap justify-center">
+        <a
+          href="https://www.instagram.com/shameel_shajaad/"
+          target="_blank"
+          class="hover:scale-110 transition-transform"
+        >
+          <img
+            src="assets/svg/instagram.svg"
+            alt="Instagram"
+            class="w-6 h-6 social_icon"
+          />
+        </a>
+
+        <a
+          href="https://web.facebook.com/profile.php?id=61582577528512"
+          target="_blank"
+          class="hover:scale-110 transition-transform"
+        >
+          <img
+            src="assets/svg/facebook.svg"
+            alt="Facebook"
+            class="w-6 h-6 social_icon"
+          />
+        </a>
+
+        <a
+          href="https://github.com/ShameelShajaad"
+          target="_blank"
+          class="hover:scale-110 transition-transform"
+        >
+          <img
+            src="assets/svg/github.svg"
+            alt="GitHub"
+            class="w-6 h-6 social_icon"
+          />
+        </a>
+
+        <a
+          href="https://www.linkedin.com/in/shameel-shajaad/"
+          target="_blank"
+          class="hover:scale-110 transition-transform"
+        >
+          <img
+            src="assets/svg/linkedin.svg"
+            alt="LinkedIn"
+            class="w-6 h-6 social_icon"
+          />
+        </a>
+      </div>
+
+      <p class="text-gray-400 text-xs sm:text-sm">
+        © 2025 Developed by <span class="font-semibold">Shameel Shajaad</span>
+      </p>
+    </footer>
   </body>
 </html>
