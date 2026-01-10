@@ -4,6 +4,8 @@ const InventoryMenu = document.getElementById("InventoryMenu");
 const viewDetails = document.getElementById("viewDetails");
 const detailsContent = document.getElementById("detailsContent");
 const closeDetailsBtn = document.getElementById("closeDetailsBtn");
+const addNewItemBtn = document.getElementById("addNewItem");
+const addItemPopup = document.getElementById("addItemPopup");
 
 fetchInventoryData();
 
@@ -99,3 +101,81 @@ viewDetails.addEventListener("click", (e) => {
     viewDetails.classList.add("hidden");
   }
 });
+
+function addNewItem() {
+  addItemPopup.innerHTML = "";
+
+  let div = document.createElement("div");
+  div.className =
+    "bg-white border border-white/10 rounded-xl w-[90%] max-w-md p-6";
+
+  div.innerHTML = `
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-black">Add a New Item</h2>
+      <button class="cursor-pointer" onclick="closeAddNewItem()">
+        <img
+          src="assets/svg/x.svg"
+          alt="x_icon"
+          class="w-6 h-6"
+        />
+      </button>
+      </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-black/70 mb-1">Item Name</label>
+            <input
+              id="itemName"
+              type="text"
+              placeholder="e.g. Powder Canister"
+              class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+            />
+          </div>
+          <div>
+            <label class="block text-sm text-black/70 mb-1">Price (LKR)</label>
+            <input
+              id="itemPrice"
+              type="number"
+              placeholder="e.g. 25.99"
+              class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm text-black/70 mb-1">Category</label>
+            <input
+              id="itemCategory"
+              type="text"
+              placeholder="e.g. beauty"
+              class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+            />
+          </div>
+        </div>
+
+        <div class="flex gap-3 mt-6">
+          <button
+            onclick="closeAddNewItem()"
+            class="flex-1 border border-black/20 text-black rounded-lg py-2 hover:bg-black/10 transition"
+          > 
+            Cancel
+          </button>
+          <button
+            onclick="addItemBtn()"
+            class="flex-1 bg-[#36E27B] text-black font-bold rounded-lg py-2 hover:bg-black hover:text-white transition"
+          >
+            Add Item
+          </button>
+        </div>
+        `;
+
+  addItemPopup.appendChild(div);
+  addItemPopup.style.display = "flex";
+}
+
+function closeAddNewItem() {
+  addItemPopup.style.display = "none";
+}
+
+function addItemBtn() {
+
+}
