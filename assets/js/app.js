@@ -150,6 +150,15 @@ function addNewItem() {
               class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
             />
           </div>
+          <div>
+          <label class="block text-sm text-black/70 mb-1">Upload Image</label>
+          <input
+            id="itemImage"
+            type="file"
+            accept="image/*"
+            class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+          />
+        </div>
         </div>
 
         <div class="flex gap-3 mt-6">
@@ -177,5 +186,36 @@ function closeAddNewItem() {
 }
 
 function addItemBtn() {
+  const itemName = document.getElementById("itemName").value;
+  const itemPrice = document.getElementById("itemPrice").value;
+  const itemCategory = document.getElementById("itemCategory").value;
+  const itemImage = document.getElementById("itemImage").files[0];
 
+  if (!itemName || !itemPrice || !itemCategory || !itemImage) {
+    alert("Please fill in all fields and select an image.");
+    return;
+  } else {
+    let newProduct = {
+      title: itemName,
+      price: itemPrice,
+      category: itemCategory,
+      images: itemImage,
+    };
+
+    addNewItemToApi(newProduct);
+    closeAddNewItem();
+  }
+}
+
+async function addNewItemToApi(product) {
+  const response = await fetch("https://dummyjson.com/products/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(product),
+  });
+
+  const data = await response.json();
+  console.log("Saved to API:", data);
+  alert("New item added successfully!");
+  fetchInventoryData();
 }
