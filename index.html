@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Shop Manage</title>
   </head>
-  <body class="bg-lightbg font-inter min-h-screen">
+  <body class="bg-[#f6f7f8] font-inter min-h-screen">
     <!-- NAVBAR -->
 
     <header class="fixed top-0 left-0 right-0 bg-white border-b shadow-sm z-50">
@@ -20,6 +20,65 @@
       </div>
     </header>
 
+    <!-- MAIN CONTENT -->
+
+    <main class="pt-24 px-6 pb-12">
+      <div class="px-6">
+        <!-- PAGE TITLE -->
+        <div class="mb-6">
+          <h2 class="text-3xl font-black">Product Inventory</h2>
+          <p class="text-gray-500">Manage and track your products</p>
+        </div>
+      </div>
+
+      <div class="px-6 py-4">
+        <div
+          id="InventoryMenu"
+          class="menu-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div
+            class="bg-white rounded-xl p-4 flex flex-col items-center gap-3 hover:scale-105 transition-transform duration-300"
+          >
+            <div
+              class="relative w-full h-48 md:h-56 lg:h-80 rounded-lg overflow-hidden"
+            >
+              <img
+                src="assets/images/logo.png"
+                alt="${item.name}"
+                class="w-full h-full object-cover"
+              />
+            </div>
+
+            <p class="text-gray font-semibold text-lg text-center">
+              name
+            </p>
+            <p class="text-gray-600 text-sm text-center">
+              price
+            </p>
+            <div class="flex gap-3">
+              <button
+                class="edit_btn flex items-center border bg-[#137fec] hover:bg-blue-600 transition-all rounded-full border-none px-6 md:px-12 py-2 flex gap-2"
+              >
+                <img
+                  src="assets/svg/pencil-fill.svg"
+                  alt="pencil_icon"
+                  class="invert brightness-0 filter w-6 h-6"
+                />
+                <p class="text-lg text-white">Edit</p>
+              </button>
+              <button
+                class="delete_btn border bg-red-500 hover:bg-red-600 transition-all rounded-full py-2 px-4 border-none"
+              >
+                <img
+                  src="assets/svg/trash.svg"
+                  alt="trash_icon"
+                  class="w-6 h-6"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </body>
 </html>
