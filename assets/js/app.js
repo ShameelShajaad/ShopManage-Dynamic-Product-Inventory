@@ -7,13 +7,33 @@ const closeDetailsBtn = document.getElementById("closeDetailsBtn");
 const addNewItemBtn = document.getElementById("addNewItem");
 const addItemPopup = document.getElementById("addItemPopup");
 const editItemPopup = document.getElementById("editItemPopup");
+const globalLoader = document.getElementById("globalLoader");
+
+let activeFetches = 0;
+
+
+async function fetchWithLoader(url, options = {}) {
+  if (activeFetches === 0) globalLoader.classList.remove("hidden");
+  activeFetches++;
+
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error("Network response was not ok");
+    return await response.json();
+  } catch (err) {
+    console.error("Fetch error:", err);
+    throw err;
+  } finally {
+    activeFetches--;
+    if (activeFetches === 0) globalLoader.classList.add("hidden");
+  }
+}
+
 
 fetchInventoryData();
 
 async function fetchInventoryData() {
-  const response = await fetch("https://dummyjson.com/products?limit=10");
-  const data = await response.json();
-  console.log(data);
+  const data = await fetchWithLoader("https://dummyjson.com/products?limit=100");
 
   InventoryMenu.innerHTML = "";
 
@@ -294,36 +314,30 @@ function editItemBtn(productId) {
 
 
 async function addNewItemToApi(product) {
-  const response = await fetch("https://dummyjson.com/products/add", {
+  await fetchWithLoader("https://dummyjson.com/products/add", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(product),
   });
 
-  const data = await response.json();
-  console.log("Saved to API:", data);
   alert("New item added successfully!");
   fetchInventoryData();
 }
 
 async function deleteItemFromApi(productId) {
-  const response = await fetch(`https://dummyjson.com/products/${productId}`, {
+  await fetchWithLoader(`https://dummyjson.com/products/${productId}`, {
     method: "DELETE",
   });
-  const data = await response.json();
-  console.log("Deleted from API:", data);
   alert("Item deleted successfully!");
   fetchInventoryData();
 }
 
 async function editItemInApi(productId, updatedData) {
-  const response = await fetch(`https://dummyjson.com/products/${productId}`, {
+  await fetchWithLoader(`https://dummyjson.com/products/${productId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updatedData),
   });
-  const data = await response.json();
-  console.log("Updated in API:", data);
   alert("Item updated successfully!");
   fetchInventoryData();
 }
