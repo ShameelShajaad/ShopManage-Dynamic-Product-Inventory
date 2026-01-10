@@ -1,7 +1,9 @@
 console.log("js loaded!");
 
 const InventoryMenu = document.getElementById("InventoryMenu");
-
+const viewDetails = document.getElementById("viewDetails");
+const detailsContent = document.getElementById("detailsContent");
+const closeDetailsBtn = document.getElementById("closeDetailsBtn");
 
 fetchInventoryData();
 
@@ -61,5 +63,39 @@ async function fetchInventoryData() {
 
     InventoryMenu.appendChild(div);
 
+    const viewBtn = div.querySelector(".view_details_btn");
+
+    viewBtn.addEventListener("click", () => {
+      detailsContent.innerHTML = `
+        <img src="${product.images[0]}" alt="${product.title}"
+            class="w-half h-62 sm:h-70 object-cover" />
+        <h2 class="text-xl text-white font-bold mb-1">${product.title}</h2>
+        <p class="text-sm text-gray-300 mb-2 py-2">${product.description}</p>
+        <p class="text-sm text-yellow-400 mb-2">⭐ ${product.rating} / 5</p>
+        <p class="text-sm text-gray-400 mb-1">
+            <strong>Price:</strong> $${product.price}
+        </p>
+        <p class="text-sm text-gray-400 mb-1">
+            <strong>Category:</strong> ${product.category}
+        </p>
+        <p class="text-sm text-gray-400 mb-1">
+            <strong>Brand:</strong> ${product.brand}
+        </p>
+        <p class="text-sm text-gray-400 mb-1">
+            <strong>Stock Quantity:</strong> ${product.stock}
+        </p>
+        `;
+      viewDetails.classList.remove("hidden");
+    });
   });
 }
+
+closeDetailsBtn.addEventListener("click", () => {
+  viewDetails.classList.add("hidden");
+});
+
+viewDetails.addEventListener("click", (e) => {
+  if (e.target === viewDetails) {
+    viewDetails.classList.add("hidden");
+  }
+});
