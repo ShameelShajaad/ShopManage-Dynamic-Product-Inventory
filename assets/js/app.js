@@ -6,6 +6,7 @@ const detailsContent = document.getElementById("detailsContent");
 const closeDetailsBtn = document.getElementById("closeDetailsBtn");
 const addNewItemBtn = document.getElementById("addNewItem");
 const addItemPopup = document.getElementById("addItemPopup");
+const editItemPopup = document.getElementById("editItemPopup");
 
 fetchInventoryData();
 
@@ -42,7 +43,8 @@ async function fetchInventoryData() {
             <div class="flex gap-3">
               <button
                 class="edit_btn flex items-center border bg-[#137fec] hover:bg-blue-600 transition-all rounded-full border-none px-6 md:px-12 py-2 flex gap-2"
-              >
+                onclick="editItem(${product.id})"
+                >
                 <img
                   src="assets/svg/pencil-fill.svg"
                   alt="pencil_icon"
@@ -52,7 +54,8 @@ async function fetchInventoryData() {
               </button>
               <button
                 class="delete_btn border bg-red-500 hover:bg-red-600 transition-all rounded-full py-2 px-4 border-none"
-              >
+                onclick="deleteItemFromApi(${product.id})"
+                >
                 <img
                   src="assets/svg/trash.svg"
                   alt="trash_icon"
@@ -206,6 +209,89 @@ function addItemBtn() {
     closeAddNewItem();
   }
 }
+
+async function editItem(productId) {
+  const response = await fetch("https://dummyjson.com/products/" + productId);
+  const data = await response.json();
+
+  editItemPopup.innerHTML = "";
+
+  let div = document.createElement("div");
+  div.className =
+    "bg-white border border-white/10 rounded-xl w-[90%] max-w-md p-6";
+
+  div.innerHTML = `
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-black">Edit Item</h2>
+      <button class="cursor-pointer" onclick="closeEditItem()">
+        <img
+          src="assets/svg/x.svg"
+          alt="x_icon"
+          class="w-6 h-6"
+        />
+      </button>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm text-black/70 mb-1">Item Name</label>
+        <input
+          id="itemName"
+          type="text"
+          placeholder="e.g. Powder Canister"
+          class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+        />
+      </div>
+      <div>
+        <label class="block text-sm text-black/70 mb-1">Price (LKR)</label>
+        <input
+          id="itemPrice"
+          type="number"
+          placeholder="e.g. 20.99"
+          class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+        />
+      </div>
+      <div class="flex mt-6">
+          <button
+            onclick="editItemBtn(${data.id})"
+            class="flex-1 bg-[#36E27B] text-black font-bold rounded-lg py-2 hover:bg-black hover:text-white transition"
+          >
+            Edit Item
+          </button>
+        </div>
+    `;
+  editItemPopup.appendChild(div);
+  editItemPopup.style.display = "flex";
+
+  const itemName = document.getElementById("itemName");
+  const itemPrice = document.getElementById("itemPrice");
+
+  itemName.value = data.title;
+  itemPrice.value = data.price;
+}
+
+function closeEditItem() {
+  editItemPopup.style.display = "none";
+}
+
+function editItemBtn(productId) {
+  const itemName = document.getElementById("itemName");
+  const itemPrice = document.getElementById("itemPrice");
+
+  if (!itemName || !itemPrice) {
+    alert("Please fill in all fields.");
+    return;
+  } else {
+    let editedProduct = {
+      title: itemName.value,
+      price: itemPrice.value,
+    };
+
+    editItemInApi(productId, editedProduct);
+    closeEditItem();
+  }
+}
+
 
 async function addNewItemToApi(product) {
   const response = await fetch("https://dummyjson.com/products/add", {
