@@ -7,37 +7,38 @@ const closeDetailsBtn = document.getElementById("closeDetailsBtn");
 const addNewItemBtn = document.getElementById("addNewItem");
 const addItemPopup = document.getElementById("addItemPopup");
 const editItemPopup = document.getElementById("editItemPopup");
-const globalLoader = document.getElementById("globalLoader");
 
-let activeFetches = 0;
+let products=[];
 
-
-async function fetchWithLoader(url, options = {}) {
-  if (activeFetches === 0) globalLoader.classList.remove("hidden");
-  activeFetches++;
-
-  try {
-    const response = await fetch(url, options);
-    if (!response.ok) throw new Error("Network response was not ok");
-    return await response.json();
-  } catch (err) {
-    console.error("Fetch error:", err);
-    throw err;
-  } finally {
-    activeFetches--;
-    if (activeFetches === 0) globalLoader.classList.add("hidden");
-  }
+async function loadProducts() {
+    const localData = localStorage.getItem('inventory');
+    if(localData) {
+        products=JSON.parse(localData);
+    }else{
+        const response = await fetch("https://dummyjson.com/products?limit=100");
+      const data = await response.json();
+      products = data.products.map(p => ({
+        id: p.id,
+        title: p.title,
+        price: p.price,
+        category: p.category,
+        brand: p.brand || "",
+        stock: p.stock || 0,
+        rating: p.rating || 0,
+        description: p.description || "",
+        images: p.images || ["assets/images/logo.png"]
+      })); 
+        localStorage.setItem('inventory', JSON.stringify(products));
+    }
+    renderInventory();
 }
 
+loadProducts();
 
-fetchInventoryData();
-
-async function fetchInventoryData() {
-  const data = await fetchWithLoader("https://dummyjson.com/products?limit=100");
-
+async function renderInventory() {
   InventoryMenu.innerHTML = "";
 
-  data.products.forEach((product) => {
+  products.forEach((product) => {
     let div = document.createElement("div");
     div.className =
       "bg-white rounded-xl p-4 flex flex-col items-center gap-3 hover:scale-105 transition-transform duration-300 shadow-xl";
@@ -48,7 +49,7 @@ async function fetchInventoryData() {
             >
               <img
                 src="${product.images[0]}"
-                alt="${product.name}"
+                alt="${product.title}"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -74,7 +75,7 @@ async function fetchInventoryData() {
               </button>
               <button
                 class="delete_btn border bg-red-500 hover:bg-red-600 transition-all rounded-full py-2 px-4 border-none"
-                onclick="deleteItemFromApi(${product.id})"
+                onclick="deleteItem(${product.id})"
                 >
                 <img
                   src="assets/svg/trash.svg"
@@ -225,7 +226,7 @@ function addItemBtn() {
       images: itemImage,
     };
 
-    addNewItemToApi(newProduct);
+    add(newProduct);
     closeAddNewItem();
   }
 }
@@ -307,37 +308,35 @@ function editItemBtn(productId) {
       price: itemPrice.value,
     };
 
-    editItemInApi(productId, editedProduct);
+    edit(productId, editedProduct);
     closeEditItem();
   }
 }
 
 
-async function addNewItemToApi(product) {
-  await fetchWithLoader("https://dummyjson.com/products/add", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(product),
-  });
-
-  alert("New item added successfully!");
-  fetchInventoryData();
+function add(product){
+  product.id=products.length ?  products[products.length -1].id +1 : 1;
+  products.push(product);
+  localStorage.setItem('inventory', JSON.stringify(products));
+  alert("Item added successfully!");
+  renderInventory();
 }
 
-async function deleteItemFromApi(productId) {
-  await fetchWithLoader(`https://dummyjson.com/products/${productId}`, {
-    method: "DELETE",
-  });
+function edit(productId, updatedProduct){
+  const index = products.findIndex(p => p.id === productId);
+  if(index>-1){
+    products[index]={...products[index],...updatedProduct}
+    localStorage.setItem('inventory', JSON.stringify(products));
+    alert("Item updated successfully!");
+    renderInventory();
+  }
+}
+
+function deleteItem(productId){
+  products=products.filter(p => p.id !== productId);
+  localStorage.setItem('inventory', JSON.stringify(products));
   alert("Item deleted successfully!");
-  fetchInventoryData();
+  renderInventory();
 }
 
-async function editItemInApi(productId, updatedData) {
-  await fetchWithLoader(`https://dummyjson.com/products/${productId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedData),
-  });
-  alert("Item updated successfully!");
-  fetchInventoryData();
-}
+
