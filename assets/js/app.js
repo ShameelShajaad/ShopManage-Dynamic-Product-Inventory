@@ -15,7 +15,13 @@ async function loadProducts() {
     if(localData) {
         products=JSON.parse(localData);
     }else{
+      try {
         const response = await fetch("https://dummyjson.com/products?limit=100");
+      } catch (error) {
+        alert("Failed to load products. Please try again later...");
+        console.error("Error fetching products:", error);
+        return;
+      }
       const data = await response.json();
       products = data.products.map(p => ({
         id: p.id,
@@ -209,11 +215,14 @@ function closeAddNewItem() {
   addItemPopup.style.display = "none";
 }
 
-function addItemBtn() {
+async function addItemBtn() {
   const itemName = document.getElementById("itemName").value;
   const itemPrice = document.getElementById("itemPrice").value;
   const itemCategory = document.getElementById("itemCategory").value;
   const itemImage = document.getElementById("itemImage").files[0];
+
+
+  let imageBase64 = await fileToBase64(itemImage);
 
   if (!itemName || !itemPrice || !itemCategory || !itemImage) {
     alert("Please fill in all fields and select an image.");
@@ -223,7 +232,7 @@ function addItemBtn() {
       title: itemName,
       price: itemPrice,
       category: itemCategory,
-      images: itemImage,
+      images: [imageBase64],
     };
 
     add(newProduct);
@@ -232,8 +241,7 @@ function addItemBtn() {
 }
 
 async function editItem(productId) {
-  const response = await fetch("https://dummyjson.com/products/" + productId);
-  const data = await response.json();
+  const data = products.find((p) => p.id === productId);
 
   editItemPopup.innerHTML = "";
 
@@ -340,3 +348,11 @@ function deleteItem(productId){
 }
 
 
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
