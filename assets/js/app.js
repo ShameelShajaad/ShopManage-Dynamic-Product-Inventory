@@ -15,8 +15,10 @@ async function loadProducts() {
     if(localData) {
         products=JSON.parse(localData);
     }else{
+      let response
+
       try {
-        const response = await fetch("https://dummyjson.com/products?limit=100");
+        response = await fetch("https://dummyjson.com/products?limit=100");
       } catch (error) {
         alert("Failed to load products. Please try again later...");
         console.error("Error fetching products:", error);
@@ -222,12 +224,15 @@ async function addItemBtn() {
   const itemImage = document.getElementById("itemImage").files[0];
 
 
-  let imageBase64 = await fileToBase64(itemImage);
 
   if (!itemName || !itemPrice || !itemCategory || !itemImage) {
     alert("Please fill in all fields and select an image.");
     return;
   } else {
+
+    
+  let imageBase64 = await fileToBase64(itemImage);
+
     let newProduct = {
       title: itemName,
       price: itemPrice,
