@@ -169,7 +169,7 @@ function addNewItem() {
           <div>
             <label class="block text-sm text-black/70 mb-1">Item Name</label>
             <input
-              id="itemName"
+              id="itemNameAdd"
               type="text"
               placeholder="e.g. Powder Canister"
               class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
@@ -178,7 +178,7 @@ function addNewItem() {
           <div>
             <label class="block text-sm text-black/70 mb-1">Price (LKR)</label>
             <input
-              id="itemPrice"
+              id="itemPriceAdd"
               type="number"
               placeholder="e.g. 25.99"
               class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
@@ -188,16 +188,43 @@ function addNewItem() {
           <div>
             <label class="block text-sm text-black/70 mb-1">Category</label>
             <input
-              id="itemCategory"
+              id="itemCategoryAdd"
               type="text"
               placeholder="e.g. beauty"
               class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
             />
           </div>
           <div>
+            <label class="block text-sm text-black/70 mb-1">Brand</label>
+            <input
+              id="itemBrandAdd"
+              type="text"
+              placeholder="e.g. CleanWash"
+              class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+            />
+          </div>
+          <div>
+            <label class="block text-sm text-black/70 mb-1">Stock</label>
+            <input
+              id="itemStockAdd"
+              type="number"
+              placeholder="e.g. 15"
+              class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+            />
+          </div>
+          <div>
+            <label class="block text-sm text-black/70 mb-1">Description</label>
+            <input
+              id="itemDescriptionAdd"
+              type="text"
+              placeholder="e.g. A powerful cleaning powder"
+              class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+            />
+          </div>
+          <div>
             <label class="block text-sm text-black/70 mb-1">Upload Image</label>
             <input
-              id="itemImage"
+              id="itemImageAdd"
               type="file"
               accept="image/*"
               class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
@@ -230,26 +257,33 @@ function closeAddNewItem() {
 }
 
 async function addItemBtn() {
-  const itemName = document.getElementById("itemName").value;
-  const itemPrice = document.getElementById("itemPrice").value;
-  const itemCategory = document.getElementById("itemCategory").value;
-  const itemImage = document.getElementById("itemImage").files[0];
+  const itemNameAdd = document.getElementById("itemNameAdd").value;
+  const itemPriceAdd = document.getElementById("itemPriceAdd").value;
+  const itemCategoryAdd = document.getElementById("itemCategoryAdd").value;
+  const itemImageAdd = document.getElementById("itemImageAdd").files[0];
+  const itemBrandAdd = document.getElementById("itemBrandAdd").value;
+  const itemStockAdd = document.getElementById("itemStockAdd").value;
+  const itemDescriptionAdd = document.getElementById("itemDescriptionAdd").value;
 
 
 
-  if (!itemName || !itemPrice || !itemCategory || !itemImage) {
+  if (!itemNameAdd || !itemPriceAdd || !itemCategoryAdd || !itemImageAdd || !itemBrandAdd || !itemStockAdd || !itemDescriptionAdd) {
     alert("Please fill in all fields and select an image.");
     return;
   } else {
 
-    
-  let imageBase64 = await fileToBase64(itemImage);
+
+
+  let imageBase64 = await fileToBase64(itemImageAdd);
 
     let newProduct = {
-      title: itemName,
-      price: itemPrice,
-      category: itemCategory,
-      images: [imageBase64],
+      title: itemNameAdd,
+      price: itemPriceAdd,
+      category: itemCategoryAdd,
+      brand: itemBrandAdd,
+      stock: itemStockAdd,
+      description: itemDescriptionAdd,
+      images: [imageBase64]
     };
 
     add(newProduct);
@@ -362,14 +396,22 @@ function closeEditItem() {
 function editItemBtn(productId) {
   const itemName = document.getElementById("itemName");
   const itemPrice = document.getElementById("itemPrice");
+  const itemCategory = document.getElementById("itemCategory");
+  const itemBrand = document.getElementById("itemBrand");
+  const itemStock = document.getElementById("itemStock");
+  const itemDescription = document.getElementById("itemDescription");
 
-  if (!itemName || !itemPrice) {
+  if (!itemName || !itemPrice || !itemCategory || !itemBrand || !itemStock || !itemDescription) {
     alert("Please fill in all fields.");
     return;
   } else {
     let editedProduct = {
       title: itemName.value,
       price: itemPrice.value,
+      category: itemCategory.value,
+      brand: itemBrand.value,
+      stock: itemStock.value,
+      description: itemDescription.value
     };
 
     edit(productId, editedProduct);
