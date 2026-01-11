@@ -45,7 +45,6 @@ async function loadProducts() {
         category: p.category,
         brand: p.brand || "",
         stock: p.stock || 0,
-        rating: p.rating || 0,
         description: p.description || "",
         images: p.images || ["assets/images/logo.png"]
       })); 
@@ -119,7 +118,6 @@ async function renderInventory() {
             class="w-half h-62 sm:h-70 object-cover" />
         <h2 class="text-xl text-white font-bold mb-1">${product.title}</h2>
         <p class="text-sm text-gray-300 mb-2 py-2">${product.description}</p>
-        <p class="text-sm text-yellow-400 mb-2">⭐ ${product.rating} / 5</p>
         <p class="text-sm text-gray-400 mb-1">
             <strong>Price:</strong> $${product.price}
         </p>
@@ -197,14 +195,14 @@ function addNewItem() {
             />
           </div>
           <div>
-          <label class="block text-sm text-black/70 mb-1">Upload Image</label>
-          <input
-            id="itemImage"
-            type="file"
-            accept="image/*"
-            class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
-          />
-        </div>
+            <label class="block text-sm text-black/70 mb-1">Upload Image</label>
+            <input
+              id="itemImage"
+              type="file"
+              accept="image/*"
+              class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+            />
+          </div>
         </div>
 
         <div class="flex gap-3 mt-6">
@@ -299,23 +297,62 @@ async function editItem(productId) {
           class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
         />
       </div>
-      <div class="flex mt-6">
-          <button
-            onclick="editItemBtn(${data.id})"
-            class="flex-1 bg-[#36E27B] text-black font-bold rounded-lg py-2 hover:bg-black hover:text-white transition"
-          >
-            Edit Item
-          </button>
-        </div>
+      <div>
+        <label class="block text-sm text-black/70 mb-1">Category</label>
+        <input
+          id="itemCategory"
+          type="text"
+          placeholder="e.g. Cleaning Supplies"
+          class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+        />
+      </div>
+      <div>
+        <label class="block text-sm text-black/70 mb-1">Brand</label>
+        <input
+          id="itemBrand"
+          type="text"
+          placeholder="e.g. CleanWash"
+          class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+        />
+      </div>
+      <div>
+        <label class="block text-sm text-black/70 mb-1">Stock</label>
+        <input
+          id="itemStock"
+          type="number"
+          placeholder="e.g. 15"
+          class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+        />
+      </div>
+      <div>
+        <label class="block text-sm text-black/70 mb-1">Description</label>
+        <input
+          id="itemDescription"
+          type="text"
+          placeholder="e.g. A powerful cleaning powder"
+          class="w-full bg-transparent border border-black/20 rounded-lg px-4 py-2 text-black focus:outline-none focus:border-[#36E27B]"
+        />
+      </div>
+    </div>
+    <div class="flex mt-6">
+      <button
+        onclick="editItemBtn(${data.id})"
+        class="flex-1 bg-[#36E27B] text-black font-bold rounded-lg py-2 hover:bg-black hover:text-white transition"
+      >
+        Edit Item
+      </button>
+    </div>
+  </div>
     `;
   editItemPopup.appendChild(div);
   editItemPopup.style.display = "flex";
 
-  const itemName = document.getElementById("itemName");
-  const itemPrice = document.getElementById("itemPrice");
-
-  itemName.value = data.title;
-  itemPrice.value = data.price;
+  const itemName = document.getElementById("itemName").value= data.title;
+  const itemPrice = document.getElementById("itemPrice").value=data.price;
+  const itemCategory = document.getElementById("itemCategory").value=data.category;
+  const itemBrand = document.getElementById("itemBrand").value=data.brand;
+  const itemStock = document.getElementById("itemStock").value=data.stock;
+  const itemDescription = document.getElementById("itemDescription").value=data.description;
 }
 
 function closeEditItem() {
