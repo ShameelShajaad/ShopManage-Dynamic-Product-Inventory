@@ -7,10 +7,23 @@ const closeDetailsBtn = document.getElementById("closeDetailsBtn");
 const addNewItemBtn = document.getElementById("addNewItem");
 const addItemPopup = document.getElementById("addItemPopup");
 const editItemPopup = document.getElementById("editItemPopup");
+const loadingScreen = document.getElementById("loadingScreen");
+
+function showLoader() {
+  loadingScreen.classList.remove("hidden");
+}
+
+function hideLoader() {
+  loadingScreen.classList.add("hidden");
+}
+
 
 let products=[];
 
 async function loadProducts() {
+
+  showLoader();
+
     const localData = localStorage.getItem('inventory');
     if(localData) {
         products=JSON.parse(localData);
@@ -39,6 +52,7 @@ async function loadProducts() {
         localStorage.setItem('inventory', JSON.stringify(products));
     }
     renderInventory();
+    hideLoader();
 }
 
 loadProducts();
