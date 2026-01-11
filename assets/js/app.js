@@ -17,41 +17,39 @@ function hideLoader() {
   loadingScreen.classList.add("hidden");
 }
 
-
-let products=[];
+let products = [];
 
 async function loadProducts() {
-
   showLoader();
 
-    const localData = localStorage.getItem('inventory');
-    if(localData) {
-        products=JSON.parse(localData);
-    }else{
-      let response
+  const localData = localStorage.getItem("inventory");
+  if (localData) {
+    products = JSON.parse(localData);
+  } else {
+    let response;
 
-      try {
-        response = await fetch("https://dummyjson.com/products?limit=100");
-      } catch (error) {
-        alert("Failed to load products. Please try again later...");
-        console.error("Error fetching products:", error);
-        return;
-      }
-      const data = await response.json();
-      products = data.products.map(p => ({
-        id: p.id,
-        title: p.title,
-        price: p.price,
-        category: p.category,
-        brand: p.brand || "",
-        stock: p.stock || 0,
-        description: p.description || "",
-        images: p.images || ["assets/images/logo.png"]
-      })); 
-        localStorage.setItem('inventory', JSON.stringify(products));
+    try {
+      response = await fetch("https://dummyjson.com/products?limit=100");
+    } catch (error) {
+      alert("Failed to load products. Please try again later...");
+      console.error("Error fetching products:", error);
+      return;
     }
-    renderInventory();
-    hideLoader();
+    const data = await response.json();
+    products = data.products.map((p) => ({
+      id: p.id,
+      title: p.title,
+      price: p.price,
+      category: p.category,
+      brand: p.brand || "",
+      stock: p.stock || 0,
+      description: p.description || "",
+      images: p.images || ["assets/images/logo.png"],
+    }));
+    localStorage.setItem("inventory", JSON.stringify(products));
+  }
+  renderInventory();
+  hideLoader();
 }
 
 loadProducts();
@@ -263,18 +261,22 @@ async function addItemBtn() {
   const itemImageAdd = document.getElementById("itemImageAdd").files[0];
   const itemBrandAdd = document.getElementById("itemBrandAdd").value;
   const itemStockAdd = document.getElementById("itemStockAdd").value;
-  const itemDescriptionAdd = document.getElementById("itemDescriptionAdd").value;
+  const itemDescriptionAdd =
+    document.getElementById("itemDescriptionAdd").value;
 
-
-
-  if (!itemNameAdd || !itemPriceAdd || !itemCategoryAdd || !itemImageAdd || !itemBrandAdd || !itemStockAdd || !itemDescriptionAdd) {
+  if (
+    !itemNameAdd ||
+    !itemPriceAdd ||
+    !itemCategoryAdd ||
+    !itemImageAdd ||
+    !itemBrandAdd ||
+    !itemStockAdd ||
+    !itemDescriptionAdd
+  ) {
     alert("Please fill in all fields and select an image.");
     return;
   } else {
-
-
-
-  let imageBase64 = await fileToBase64(itemImageAdd);
+    let imageBase64 = await fileToBase64(itemImageAdd);
 
     let newProduct = {
       title: itemNameAdd,
@@ -283,7 +285,7 @@ async function addItemBtn() {
       brand: itemBrandAdd,
       stock: itemStockAdd,
       description: itemDescriptionAdd,
-      images: [imageBase64]
+      images: [imageBase64],
     };
 
     add(newProduct);
@@ -381,12 +383,14 @@ async function editItem(productId) {
   editItemPopup.appendChild(div);
   editItemPopup.style.display = "flex";
 
-  const itemName = document.getElementById("itemName").value= data.title;
-  const itemPrice = document.getElementById("itemPrice").value=data.price;
-  const itemCategory = document.getElementById("itemCategory").value=data.category;
-  const itemBrand = document.getElementById("itemBrand").value=data.brand;
-  const itemStock = document.getElementById("itemStock").value=data.stock;
-  const itemDescription = document.getElementById("itemDescription").value=data.description;
+  const itemName = (document.getElementById("itemName").value = data.title);
+  const itemPrice = (document.getElementById("itemPrice").value = data.price);
+  const itemCategory = (document.getElementById("itemCategory").value =
+    data.category);
+  const itemBrand = (document.getElementById("itemBrand").value = data.brand);
+  const itemStock = (document.getElementById("itemStock").value = data.stock);
+  const itemDescription = (document.getElementById("itemDescription").value =
+    data.description);
 }
 
 function closeEditItem() {
@@ -401,7 +405,14 @@ function editItemBtn(productId) {
   const itemStock = document.getElementById("itemStock");
   const itemDescription = document.getElementById("itemDescription");
 
-  if (!itemName || !itemPrice || !itemCategory || !itemBrand || !itemStock || !itemDescription) {
+  if (
+    !itemName ||
+    !itemPrice ||
+    !itemCategory ||
+    !itemBrand ||
+    !itemStock ||
+    !itemDescription
+  ) {
     alert("Please fill in all fields.");
     return;
   } else {
@@ -411,7 +422,7 @@ function editItemBtn(productId) {
       category: itemCategory.value,
       brand: itemBrand.value,
       stock: itemStock.value,
-      description: itemDescription.value
+      description: itemDescription.value,
     };
 
     edit(productId, editedProduct);
@@ -419,32 +430,30 @@ function editItemBtn(productId) {
   }
 }
 
-
-function add(product){
-  product.id=products.length ?  products[products.length -1].id +1 : 1;
+function add(product) {
+  product.id = products.length ? products[products.length - 1].id + 1 : 1;
   products.push(product);
-  localStorage.setItem('inventory', JSON.stringify(products));
+  localStorage.setItem("inventory", JSON.stringify(products));
   alert("Item added successfully!");
   renderInventory();
 }
 
-function edit(productId, updatedProduct){
-  const index = products.findIndex(p => p.id === productId);
-  if(index>-1){
-    products[index]={...products[index],...updatedProduct}
-    localStorage.setItem('inventory', JSON.stringify(products));
+function edit(productId, updatedProduct) {
+  const index = products.findIndex((p) => p.id === productId);
+  if (index > -1) {
+    products[index] = { ...products[index], ...updatedProduct };
+    localStorage.setItem("inventory", JSON.stringify(products));
     alert("Item updated successfully!");
     renderInventory();
   }
 }
 
-function deleteItem(productId){
-  products=products.filter(p => p.id !== productId);
-  localStorage.setItem('inventory', JSON.stringify(products));
+function deleteItem(productId) {
+  products = products.filter((p) => p.id !== productId);
+  localStorage.setItem("inventory", JSON.stringify(products));
   alert("Item deleted successfully!");
   renderInventory();
 }
-
 
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
